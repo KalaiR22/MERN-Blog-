@@ -38,13 +38,13 @@ export default function Header() {
       </div>
       
         <NavbarCollapse>
-          <NavbarLink active={path==='/'} as={div}>
+          <NavbarLink active={path==='/'} >
             <Link to='/'>Home</Link>
           </NavbarLink>
-          <NavbarLink active={path==='/about'}  as={div}>
+          <NavbarLink active={path==='/about'}  >
             <Link to='/about'>About</Link>
           </NavbarLink>
-          <NavbarLink active={path==='/projects'}  as={div}>
+          <NavbarLink active={path==='/projects'}  >
             <Link to='/projects'>Projects</Link>
           </NavbarLink>
         </NavbarCollapse>
