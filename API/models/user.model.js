@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
         },
         profilePicture:{
             type: String,
-            default: "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+            default: "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&ga=GA1.1.735520172.1710460800&semt=ais",
 
         }
     }, {timestamps:true}

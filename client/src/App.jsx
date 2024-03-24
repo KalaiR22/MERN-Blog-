@@ -7,6 +7,7 @@ import Signin from './Pages/Signin'
 import Signup from './Pages/Signup'
 import Header from './componenets/Header'
 import './App.css'
+import PrivateRoute from './componenets/PrivateRoute'
 function App() {
   
 
@@ -16,12 +17,16 @@ function App() {
     <Routes>
       <Route  path='/' element={<Home/>}/>
       <Route  path='/about' element={<About/>}/>
-      <Route  path='/dashboard' element={<Dashboard/>}/>
+      <Route element={<PrivateRoute/>}>
+        <Route  path='/dashboard' element={<Dashboard/>}/>
+      </Route>
       <Route  path='/products' element={<Products/>}/>
       <Route  path='/sign-in' element={<Signin/>}/>
       <Route  path='/sign-up' element={<Signup/>}/>
     </Routes>
     </BrowserRouter>
+    
+   
   )
 }
 
