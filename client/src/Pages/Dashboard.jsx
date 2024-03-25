@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {useLocation} from 'react-router-dom'
+import DashboardSidebar from '../componenets/DashboardSidebar'
+import DashboardProfile from '../componenets/DashboardProfile'
 
 export default function Dashboard() {
   const location = useLocation();
@@ -13,7 +15,12 @@ export default function Dashboard() {
   }, [location.search])
   return (
     <div>
-      dashboard
+      <div>
+         {/* sidebar */}
+      <DashboardSidebar/>
+      </div>
+      {/* profile */}
+      {tab === 'profile' && <DashboardProfile/>}
     </div>
   )
 }

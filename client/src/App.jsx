@@ -6,6 +6,7 @@ import Products from './Pages/Products'
 import Signin from './Pages/Signin'
 import Signup from './Pages/Signup'
 import Header from './componenets/Header'
+import FooterCom from './componenets/FooterCom'
 import './App.css'
 import PrivateRoute from './componenets/PrivateRoute'
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Route  path='/sign-in' element={<Signin/>}/>
       <Route  path='/sign-up' element={<Signup/>}/>
     </Routes>
+    <FooterCom/>
     </BrowserRouter>
     
    
