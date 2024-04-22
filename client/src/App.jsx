@@ -9,6 +9,8 @@ import Header from './componenets/Header'
 import FooterCom from './componenets/FooterCom'
 import './App.css'
 import PrivateRoute from './componenets/PrivateRoute'
+import OnlyAdminRoute from './componenets/OnlyAdminRoute'
+import CreatePost from './Pages/CreatePost'
 function App() {
   
 
@@ -20,6 +22,9 @@ function App() {
       <Route  path='/about' element={<About/>}/>
       <Route element={<PrivateRoute/>}>
         <Route  path='/dashboard' element={<Dashboard/>}/>
+      </Route>
+       <Route element={<OnlyAdminRoute/>}>
+        <Route  path='/createpost' element={<CreatePost/>}/>
       </Route>
       <Route  path='/products' element={<Products/>}/>
       <Route  path='/sign-in' element={<Signin/>}/>

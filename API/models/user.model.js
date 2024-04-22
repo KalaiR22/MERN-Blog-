@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&ga=GA1.1.735520172.1710460800&semt=ais",
 
+        },
+        isAdmin:{
+          type: Boolean,
+          default:false,
         }
     }, {timestamps:true}
 );
