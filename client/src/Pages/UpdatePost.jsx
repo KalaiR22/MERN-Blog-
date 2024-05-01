@@ -1,20 +1,44 @@
-import React, { useState } from 'react';
-import { Select, TextInput, Button, FileInput, Alert } from 'flowbite-react';
+import React, { useState , useEffect} from 'react';
+import { Select, TextInput, Button, FileInput, Alert} from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export default function CreatePost() {
+export default function UpdatePost() {
     const [file, setFile] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
     const [formData, setFormData] = useState({});
-    const [publishError, setPublishError] = useState(null);
+    const [publisherror, setPublisherror] = useState(null);
     const navigate = useNavigate();
+    const {postId} = useParams();
+    const {currentUser} = useSelector((state)=> state.user);
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const res = await fetch(`/api/post/getposts?postId=${postId}`);
+                const data = await res.json();
+                if (!res.ok) {
+                    console.log(data.message);
+                    setPublisherror(data.message);
+                    return;
+                }
+                if (res.ok) {
+                    setPublisherror(null);
+                    setFormData(data.posts[0]);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
+        fetchPost(); // Call the fetchPost function
+    }, [postId]);
     
     const handleUploadImage = async () => {
         try {
@@ -53,44 +77,45 @@ export default function CreatePost() {
             console.error(error);
         }
     };
-
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await fetch('/api/post/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                setPublishError(data.message);
-                return;
-            }
-            setPublishError(null);
-            navigate(`/post/${data.slug}`);
-        } catch (error) {
-            setPublishError('Something went wrong');
+    e.preventDefault();
+    console.log(formData)
+    try {
+        const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+           setPublisherror(data.message);
+           return;
         }
-    };
+        if(res.ok){
+            setPublisherror(null);
+            navigate(`/post/${data.slug}`);
+
+        }
+
+    
+    } catch (error) {
+        setPublisherror(error.message || 'Something went wrong');
+    }
+};
 
     return (
         <div className="p-3 max-w-3x1 mx-auto min-h-screen">
-            <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
+            <h1 className="text-center text-3xl my-7 font-semibold">Update  post</h1>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 sm:flex-row justify-between">
-                    <TextInput
-                        type='text'
-                        placeholder='Title'
-                        required
-                        id='title'
-                        className='flex-1'
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    />
+                    <TextInput type='text' placeholder='Title' required id='title' className='flex-1' Value={formData.title}
+                    onChange={(e)=> setFormData({...formData, title: e.target.value})}/>
                     <Select
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                     onChange={(e)=> setFormData({...formData, category: e.target.value})} value={formData.category}
                     >
                         <option value="uncategorized">Select a category</option>
                         <option value="javascript">JavaScript</option>
@@ -100,13 +125,7 @@ export default function CreatePost() {
                 </div>
                 <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
                     <FileInput type='file' accept='image/*' onChange={(e) => setFile(e.target.files[0])} />
-                    <Button
-                        type='button'
-                        gradientDuoTone='purpleToBlue'
-                        size='sm'
-                        outline
-                        onClick={handleUploadImage}
-                    >
+                    <Button type='button' gradientDuoTone='purpleToBlue' size='sm' outline onClick={handleUploadImage}>
                         {imageUploadProgress ? (
                             <div className='w-16 h-16'>
                                 <CircularProgressbar
@@ -120,22 +139,21 @@ export default function CreatePost() {
                     </Button>
                 </div>
                 {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
-                {formData.image && (
-                    <img
-                        src={formData.image}
-                        alt='upload'
-                        className='w-full h-72 object-cover'
-                    />
-                )}
-                <ReactQuill
-                    theme='snow'
-                    placeholder='Write something...'
-                    className='h-72 mb-12'
-                    required
-                    onChange={(value) => setFormData({ ...formData, content: value })}
-                />
+{formData.image && (
+<img
+src={formData.image}
+alt='upload'
+className='w-full h-72 object-cover'
+/>
+)
+}
+
+                <ReactQuill theme='snow' placeholder='Write something...' className='h-72 mb-12' required 
+                onChange={(value)=> setFormData({...formData, content:value})} value={formData.content}/>
                 <Button type='submit' gradientDuoTone='purpleToPink'>Publish</Button>
-                {publishError && <Alert className='mt-5' color='failure'>{publishError}</Alert>}
+                {
+                    publisherror && <Alert className='mt-5' color='failure'>{publisherror}</Alert>
+                }
             </form>
             {imageUploadError && <p className="text-red-500">{imageUploadError}</p>}
             {imageUploadProgress && <p className="text-green-500">Image upload progress: {imageUploadProgress}%</p>}

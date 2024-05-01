@@ -11,6 +11,7 @@ import './App.css'
 import PrivateRoute from './componenets/PrivateRoute'
 import OnlyAdminRoute from './componenets/OnlyAdminRoute'
 import CreatePost from './Pages/CreatePost'
+import UpdatePost from './Pages/UpdatePost'
 function App() {
   
 
@@ -25,6 +26,7 @@ function App() {
       </Route>
        <Route element={<OnlyAdminRoute/>}>
         <Route  path='/createpost' element={<CreatePost/>}/>
+        <Route  path='/updatepost/:postId' element={<UpdatePost/>}/>
       </Route>
       <Route  path='/products' element={<Products/>}/>
       <Route  path='/sign-in' element={<Signin/>}/>
