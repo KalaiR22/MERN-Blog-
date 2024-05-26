@@ -12,6 +12,7 @@ import PrivateRoute from './componenets/PrivateRoute'
 import OnlyAdminRoute from './componenets/OnlyAdminRoute'
 import CreatePost from './Pages/CreatePost'
 import UpdatePost from './Pages/UpdatePost'
+import PostPage from './Pages/PostPage'
 function App() {
   
 
@@ -31,6 +32,7 @@ function App() {
       <Route  path='/products' element={<Products/>}/>
       <Route  path='/sign-in' element={<Signin/>}/>
       <Route  path='/sign-up' element={<Signup/>}/>
+      <Route path='/post/:postSlug' element={<PostPage/>}/>
     </Routes>
     <FooterCom/>
     </BrowserRouter>
